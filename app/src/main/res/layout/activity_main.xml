@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context="ui.MainActivity"
     android:orientation="vertical">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_message"
-         />
+        />
 
     <Button
         android:id="@+id/mybutton"
@@ -22,6 +22,31 @@
         android:layout_marginBottom="50dp"
         android:text="@string/button_message"
         />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/checkbox_msg"
+        />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/switch_msg"
+        />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/radio_msg"
+        />
+
+    <EditText
+        android:id="@+id/myedittext"
+        android:layout_width="168dp"
+        android:layout_height="58dp"
+        android:hint="@string/hinttext"
+        android:text="@string/editmessage" />
 
 
 </LinearLayout>
