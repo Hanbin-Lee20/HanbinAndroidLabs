@@ -24,18 +24,21 @@
         />
 
     <CheckBox
+        android:id="@+id/checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/checkbox_msg"
         />
 
     <Switch
+        android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/switch_msg"
         />
 
     <RadioButton
+        android:id="@+id/radio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/radio_msg"
@@ -48,5 +51,18 @@
         android:hint="@string/hinttext"
         android:text="@string/editmessage" />
 
+<!--    <ImageView-->
+<!--        android:id="@+id/myimg"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:src="@drawable/lab2_img"-->
+<!--        />-->
+
+    <ImageButton
+        android:src="@drawable/lab2_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/myimagebutton"
+    />
 
 </LinearLayout>
