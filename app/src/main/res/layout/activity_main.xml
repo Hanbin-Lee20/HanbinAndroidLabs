@@ -51,12 +51,12 @@
         android:hint="@string/hinttext"
         android:text="@string/editmessage" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/myimg"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:src="@drawable/lab2_img"-->
-<!--        />-->
+    <ImageView
+        android:id="@+id/myimg"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/lab2_img"
+        />
 
     <ImageButton
         android:src="@drawable/lab2_img"
