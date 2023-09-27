@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HanbinAndroidLabs</string>
-    <string name="hello_message">안녕!</string>
-    <string name="button_message">버튼</string>
+    <string name="btn1">버튼</string>
+    <string name="btn2">버튼</string>
+    <string name="btn3">버튼</string>
 </resources>
