@@ -71,17 +71,17 @@ public class MainActivity extends AppCompatActivity {
         } );
 
 
-//        variableBinding.myimg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Context context = getApplicationContext();
-//                CharSequence text = "You just clicked image!";
-//                int duration = Toast.LENGTH_SHORT;
-//
-//                Toast toast = Toast.makeText(context, text, duration);
-//                toast.show();
-//            }
-//        });
+        variableBinding.myimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = getApplicationContext();
+                CharSequence text = "You just clicked image!";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
+        });
 
         variableBinding.myimagebutton.setOnClickListener(new View.OnClickListener() {
             @Override
