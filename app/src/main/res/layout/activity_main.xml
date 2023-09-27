@@ -7,6 +7,11 @@
     tools:context="ui.MainActivity">
 
     <Button
+        android:nextFocusUp="@id/btn1"
+        android:nextFocusDown="@id/switch1"
+        android:nextFocusLeft="@id/btn3"
+        android:nextFocusRight="@id/btn2"
+
         android:id="@+id/btn1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +26,11 @@
         app:layout_constraintVertical_bias="0.012" />
 
     <Button
+        android:nextFocusUp="@id/btn2"
+        android:nextFocusDown="@id/switch1"
+        android:nextFocusLeft="@id/btn1"
+        android:nextFocusRight="@id/btn3"
+
         android:id="@+id/btn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,6 +44,11 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
+        android:nextFocusUp="@id/btn3"
+        android:nextFocusDown="@id/switch1"
+        android:nextFocusLeft="@id/btn2"
+        android:nextFocusRight="@id/btn1"
+
         android:id="@+id/btn3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
