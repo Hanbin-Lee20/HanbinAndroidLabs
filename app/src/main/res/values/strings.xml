@@ -7,5 +7,4 @@
     <string name="checkbox_msg" translatable="false">"Do you drink coffee?"</string>
     <string name="switch_msg" translatable="false">"Do you drink coffee?"</string>
     <string name="radio_msg" translatable="false">"Do you drink coffee?"</string>
-    <string name="myimagebutton" translatable="false">"Button"</string>
 </resources>
