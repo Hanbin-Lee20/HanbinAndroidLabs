@@ -3,4 +3,5 @@
     <string name="btn1">버튼</string>
     <string name="btn2">버튼</string>
     <string name="btn3">버튼</string>
+    <string name="spin_message">깃발 돌리기</string>
 </resources>
