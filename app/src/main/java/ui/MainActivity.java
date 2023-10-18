@@ -22,10 +22,15 @@ import Algonquin.cst2355.lee.R;
 import Algonquin.cst2355.lee.databinding.ActivityMainBinding;
 import data.MainViewModel;
 
+/**
+ * This contains login screen with validate function
+ * @author HanbinLee
+ * @version 1.0
+ */
 public class MainActivity extends AppCompatActivity {
-//    private MainViewModel model;
-//    private MainViewModel checkedChangeListener;
-//    private ActivityMainBinding variableBinding;
+    private MainViewModel model;
+    private MainViewModel checkedChangeListener;
+    private ActivityMainBinding variableBinding;
 
     /**
      * This holds the text at the center of the screen
@@ -51,56 +56,55 @@ public class MainActivity extends AppCompatActivity {
         et = findViewById(R.id.loginText);
         bt = findViewById(R.id.loginButton);
 
-        bt.setOnClickListener( click -> {
+        bt.setOnClickListener(click -> {
             String password = et.getText().toString();
 
             boolean isComplex = checkPasswordComplexity(password);
+
+            if(isComplex = true){
+                tv.setText("Your password meets the requirements");
+            }else{
+                tv.setText("You shall not pass!");
+            }
         });
 
-        };
+    }
+
+    ;
 
     /**
      * This function checks whether password is complex enough or not.
+     *
      * @param pw The String object that we are checking
      * @return Returns true if the password is complex.
      */
-    boolean checkPasswordComplexity(String pw){
+    boolean checkPasswordComplexity(String pw) {
 
         boolean foundUpperCase, foundLowerCase, foundNumber, foundSpecial;
 
         foundUpperCase = foundLowerCase = foundNumber = foundSpecial = false;
         int duration = Toast.LENGTH_SHORT;
 
-        for(int i = 0; i < pw.length(); i++){
+        for (int i = 0; i < pw.length(); i++) {
             char c = pw.charAt(i);
 
-            if(!Character.isUpperCase(c)) {
+            if (!Character.isUpperCase(c)) {
 
                 Toast.makeText(this, "Your password does not have an upper case letter", duration);// Say that they are missing an upper case letter;
-                return false;
-            }
-
-            else if(!Character.isLowerCase(c)) {
+                return foundUpperCase = false;
+            } else if (!Character.isLowerCase(c)) {
                 Toast.makeText(this, "Your password does not have have a lower case", duration); // Say that they are missing a lower case letter;
-                return false;
-            }
-
-            else if( !Character.isDigit(c)) {
+                return foundLowerCase = false;
+            } else if (!Character.isDigit(c)) {
                 Toast.makeText(this, "Your password does not have have a number", duration); // Say that they are missing a lower case letter;
-                return false;
+                return foundNumber = false;
+            } else if (!isSpecialCharacter(c)) {
+                return foundSpecial = false;
             }
 
-            else if(!Character.isSpecial) {}
-
         }
 
-
-                return true; //only get here if they're all true
-        }
-
-
-
-
+        return true; //only get here if they're all true
     }
 
     /**
@@ -108,28 +112,27 @@ public class MainActivity extends AppCompatActivity {
      * @param c
      * @return
      */
-    boolean isSpecialCharacter(char c){
-        switch(c){
-        case '#':
-        case '?':
-        case '*':
-        case '$':
-        case '%':
-        case '&':
-        case '@':
-        case '!':
-            return true;
-        default:
-            return false;
-    }
+    boolean isSpecialCharacter(char c) {
+        switch (c) {
+            case '#':
+            case '?':
+            case '*':
+            case '$':
+            case '%':
+            case '&':
+            case '@':
+            case '!':
+                return true;
+            default:
+                return false;
+        }
 
 
-
-    /**
-     * javadoc
-     * @param text
-     * @return
-     */
+        /**
+         * javadoc
+         * @param text
+         * @return
+         */
 //        private boolean isComplexEnough(String text) {
 //
 //            boolean result = false;
@@ -146,7 +149,13 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 
-    };
+    }
+}
+
+
+
+
+    ;
 
 
 
