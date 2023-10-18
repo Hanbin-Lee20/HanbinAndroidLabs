@@ -14,97 +14,143 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.time.Clock;
 
+import Algonquin.cst2355.lee.R;
 import Algonquin.cst2355.lee.databinding.ActivityMainBinding;
 import data.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
-    ImageButton imageButton;
-    private MainViewModel model;
-    private MainViewModel checkedChangeListener;
-    private ActivityMainBinding variableBinding;
+//    private MainViewModel model;
+//    private MainViewModel checkedChangeListener;
+//    private ActivityMainBinding variableBinding;
+
+    /**
+     * This holds the text at the center of the screen
+     */
+    private TextView tv = null;
+
+    /**
+     * This holds the button to proceed login
+     */
+    private Button bt = null;
+
+    /**
+     * This holds the edit text for accepting password
+     */
+    private EditText et = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        model = new ViewModelProvider(this).get(MainViewModel.class);
+        tv = findViewById(R.id.textView);
+        et = findViewById(R.id.loginText);
+        bt = findViewById(R.id.loginButton);
 
-        variableBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(variableBinding.getRoot());
+        bt.setOnClickListener( click -> {
+            String password = et.getText().toString();
 
-        variableBinding.mybutton.setOnClickListener(click ->
-        {
-            model.editString.postValue(variableBinding.myedittext.getText().toString());
-
-
-            model.editString.observe(this, s ->  {
-                variableBinding.textview.setText("Your edit text has: " + s);
-            });
-
+            boolean isComplex = checkPasswordComplexity(password);
         });
 
-        model.isSelected.observe(this, selected -> {
-            variableBinding.checkbox.setChecked(selected);
-            variableBinding.switch1.setChecked(selected);
-            variableBinding.radio.setChecked(selected);
+        };
 
+    /**
+     * This function checks whether password is complex enough or not.
+     * @param pw The String object that we are checking
+     * @return Returns true if the password is complex.
+     */
+    boolean checkPasswordComplexity(String pw){
 
-            CharSequence text = "The value is now:" + selected;
-            int duration = Toast.LENGTH_SHORT;
+        boolean foundUpperCase, foundLowerCase, foundNumber, foundSpecial;
 
-            Toast toast = Toast.makeText(this , text, duration);
-            toast.show();
-        });
+        foundUpperCase = foundLowerCase = foundNumber = foundSpecial = false;
+        int duration = Toast.LENGTH_SHORT;
 
-        variableBinding.checkbox.setOnCheckedChangeListener( (checkbox, isChecked) -> {
-            model.isSelected.postValue(isChecked);
-        } );
+        for(int i = 0; i < pw.length(); i++){
+            char c = pw.charAt(i);
 
-        variableBinding.switch1.setOnCheckedChangeListener( (switch1, isChecked) -> {
-            model.isSelected.postValue(isChecked);
-        } );
+            if(!Character.isUpperCase(c)) {
 
-        variableBinding.radio.setOnCheckedChangeListener( (radio, isChecked) -> {
-            model.isSelected.postValue(isChecked);
-        } );
-
-
-        variableBinding.myimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Context context = getApplicationContext();
-                CharSequence text = "You just clicked image!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                Toast.makeText(this, "Your password does not have an upper case letter", duration);// Say that they are missing an upper case letter;
+                return false;
             }
-        });
 
-        variableBinding.myimagebutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                int width = view.getWidth();
-                int height = view.getHeight();
-
-                Context context = getApplicationContext();
-                CharSequence text = "The width = " + width + " and height = " + height;
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-
+            else if(!Character.isLowerCase(c)) {
+                Toast.makeText(this, "Your password does not have have a lower case", duration); // Say that they are missing a lower case letter;
+                return false;
             }
-        });
+
+            else if( !Character.isDigit(c)) {
+                Toast.makeText(this, "Your password does not have have a number", duration); // Say that they are missing a lower case letter;
+                return false;
+            }
+
+            else if(!Character.isSpecial) {}
+
+        }
+
+
+                return true; //only get here if they're all true
+        }
+
+
 
 
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
+    boolean isSpecialCharacter(char c){
+        switch(c){
+        case '#':
+        case '?':
+        case '*':
+        case '$':
+        case '%':
+        case '&':
+        case '@':
+        case '!':
+            return true;
+        default:
+            return false;
+    }
+
+
+
+    /**
+     * javadoc
+     * @param text
+     * @return
+     */
+//        private boolean isComplexEnough(String text) {
+//
+//            boolean result = false;
+//            boolean foundUpperCase = false, foundLowerCase = false;
+//            for (int i = 0; i < text.length(); i++) {
+//                char c = text.charAt(i);
+//                if (Character.isUpperCase(c)) {
+//                    foundUpperCase = true;
+//                } else if (Character.isLowerCase(c))
+//                    foundLowerCase = true;
+//
+//            }
+//            return false;
+//
+//        }
 
     };
+
+
+
+
 
 
 
