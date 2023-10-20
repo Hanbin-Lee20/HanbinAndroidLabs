@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="textView" type="id" />
-    <item name="loginButton" type="id" />
-    <item name="loginText" type="id" />
+
 </resources>
