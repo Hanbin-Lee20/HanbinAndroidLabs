@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -176,37 +178,33 @@ public class ChatRoom extends AppCompatActivity {
                 .setNegativeButton("No", (a,b) -> {})
                 .setPositiveButton("Yes", (a,b) -> {
 
-                    Executor thread = Executors.newSingleThreadExecutor();
-                    thread.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            //insert to the database
-                            mDAO.deleteMessage(thisMessage);
-                            runOnUiThread(() -> {
-                                messages.remove(whichRow);
-                                myAdapter.notifyDataSetChanged();
-                            });
-                        }
-                    });
+//                    Executor thread = Executors.newSingleThreadExecutor();
+//                    thread.execute(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            //insert to the database
+//                            mDAO.deleteMessage(thisMessage);
+//                            runOnUiThread(() -> {
+//                                messages.remove(whichRow);
+//                                myAdapter.notifyDataSetChanged();
+//                            });
+//                        }
+//                    });
 
+                    ChatMessage removeMessage = messages.get(whichRow);
+                    messages.remove(whichRow);
+                    myAdapter.notifyItemRemoved(whichRow);
 
+                    Snackbar.make(messageText, "You deleted message #" + whichRow, Snackbar.LENGTH_LONG)
+                            .setAction("Undo", clk -> {
 
-                })
-                .create().show();
+                            messages.add(whichRow, removeMessage);
+                            myAdapter.notifyItemInserted(whichRow);
 
+                        }).show();
 
-//                Executor thread = Executors.newSingleThreadExecutor();
-//                thread.execute(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        //insert to the database
-//                        mDAO.deleteMessage(thisMessage);
-//                    }
-//                });
-//
-//                mDAO.deleteMessage(thisMessage);
-//                messages.remove(whichRow);
-//                myAdapter.notifyDataSetChanged();
+                }).create().show();
+
             });
 
             messageText = itemView.findViewById(R.id.message);
