@@ -93,10 +93,19 @@ public class ChatRoom extends AppCompatActivity {
             String userMessage = binding.textInput.getText().toString();
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a");
             String currentDateandTime = sdf.format(new Date());
-            ChatMessage chatMessage = new ChatMessage(userMessage, currentDateandTime, false);
-            messages.add(chatMessage);
+            ChatMessage cm = new ChatMessage(userMessage, currentDateandTime, false);
+            messages.add(cm);
             myAdapter.notifyItemInserted(messages.size() - 1);
             binding.textInput.setText("");
+
+            Executor thread = Executors.newSingleThreadExecutor();
+            thread.execute(new Runnable() {
+                @Override
+                public void run() {
+                    //insert to the database
+                    mDAO.insertMessage(cm);
+                }
+            });
 
         });
 
@@ -168,6 +177,9 @@ public class ChatRoom extends AppCompatActivity {
         public MyRowHolder(@NonNull View itemView) {
             super(itemView);
 
+            messageText = itemView.findViewById(R.id.message);
+            timeText = itemView.findViewById(R.id.time);
+
             itemView.setOnClickListener( cl -> {
                 int whichRow = getAbsoluteAdapterPosition();
                 ChatMessage thisMessage = messages.get(whichRow);
@@ -178,37 +190,32 @@ public class ChatRoom extends AppCompatActivity {
                 .setNegativeButton("No", (a,b) -> {})
                 .setPositiveButton("Yes", (a,b) -> {
 
-//                    Executor thread = Executors.newSingleThreadExecutor();
-//                    thread.execute(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            //insert to the database
-//                            mDAO.deleteMessage(thisMessage);
-//                            runOnUiThread(() -> {
-//                                messages.remove(whichRow);
-//                                myAdapter.notifyDataSetChanged();
-//                            });
-//                        }
-//                    });
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        mDAO.deleteMessage(thisMessage);
+                    });
 
-                    ChatMessage removeMessage = messages.get(whichRow);
+
                     messages.remove(whichRow);
                     myAdapter.notifyItemRemoved(whichRow);
 
                     Snackbar.make(messageText, "You deleted message #" + whichRow, Snackbar.LENGTH_LONG)
                             .setAction("Undo", clk -> {
 
-                            messages.add(whichRow, removeMessage);
-                            myAdapter.notifyItemInserted(whichRow);
+                                Executors.newSingleThreadExecutor().execute( () -> {
+                                    mDAO.insertMessage(thisMessage);
+                                });
 
-                        }).show();
+
+                    messages.add(whichRow, thisMessage);
+                    myAdapter.notifyItemInserted(whichRow);
+
+                        })
+                        .show();
 
                 }).create().show();
 
             });
 
-            messageText = itemView.findViewById(R.id.message);
-            timeText = itemView.findViewById(R.id.time);
 
         }
     }
