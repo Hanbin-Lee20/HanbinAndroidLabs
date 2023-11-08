@@ -81,8 +81,8 @@ public class ChatRoom extends AppCompatActivity {
             thread.execute(new Runnable() {
                 @Override
                 public void run() {
-                    //insert to the database
-                    mDAO.insertMessage(cm);
+                    long id = mDAO.insertMessage(cm);
+                    cm.id = id;
                 }
             });
 
@@ -102,8 +102,8 @@ public class ChatRoom extends AppCompatActivity {
             thread.execute(new Runnable() {
                 @Override
                 public void run() {
-                    //insert to the database
-                    mDAO.insertMessage(cm);
+                    long id = mDAO.insertMessage(cm);
+                    cm.id = id;
                 }
             });
 
@@ -193,8 +193,6 @@ public class ChatRoom extends AppCompatActivity {
                     Executors.newSingleThreadExecutor().execute(() -> {
                         mDAO.deleteMessage(thisMessage);
                     });
-
-
                     messages.remove(whichRow);
                     myAdapter.notifyItemRemoved(whichRow);
 
