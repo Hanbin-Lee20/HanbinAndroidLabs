@@ -3,6 +3,9 @@ package Algonquin.cst2355.lee;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,6 +56,20 @@ public class ChatRoom extends AppCompatActivity {
 
         chatModel = new ViewModelProvider(this).get(ChatRoomViewModel.class);
         messages = chatModel.messages.getValue();
+
+        chatModel.selectedMessage.observe(this, (newSelected) -> {
+
+            MessageDetailsFragment newFragment = new MessageDetailsFragment(newSelected);
+
+            FragmentManager fMgr = getSupportFragmentManager();
+            FragmentTransaction tx = fMgr.beginTransaction();
+            tx.add(R.id.fragmentLocation, newFragment);
+            tx.commit();
+
+//            String message = newSelected.message;
+//            String time = newSelected.timeSent;
+
+        });
 
         if(messages == null)
         {
@@ -181,36 +198,41 @@ public class ChatRoom extends AppCompatActivity {
             timeText = itemView.findViewById(R.id.time);
 
             itemView.setOnClickListener( cl -> {
-                int whichRow = getAbsoluteAdapterPosition();
-                ChatMessage thisMessage = messages.get(whichRow);
-                AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
 
-                builder.setMessage("Do you want to delete the message: " + messageText.getText())
-                .setTitle("Question:")
-                .setNegativeButton("No", (a,b) -> {})
-                .setPositiveButton("Yes", (a,b) -> {
-
-                    Executors.newSingleThreadExecutor().execute(() -> {
-                        mDAO.deleteMessage(thisMessage);
-                    });
-                    messages.remove(whichRow);
-                    myAdapter.notifyItemRemoved(whichRow);
-
-                    Snackbar.make(messageText, "You deleted message #" + whichRow, Snackbar.LENGTH_LONG)
-                            .setAction("Undo", clk -> {
-
-                                Executors.newSingleThreadExecutor().execute( () -> {
-                                    mDAO.insertMessage(thisMessage);
-                                });
+                int rowNum = getAbsoluteAdapterPosition();
+                ChatMessage selected = messages.get(rowNum);
+                chatModel.selectedMessage.postValue(selected);
 
 
-                    messages.add(whichRow, thisMessage);
-                    myAdapter.notifyItemInserted(whichRow);
 
-                        })
-                        .show();
-
-                }).create().show();
+//                AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
+//
+//                builder.setMessage("Do you want to delete the message: " + messageText.getText())
+//                .setTitle("Question:")
+//                .setNegativeButton("No", (a,b) -> {})
+//                .setPositiveButton("Yes", (a,b) -> {
+//
+//                    Executors.newSingleThreadExecutor().execute(() -> {
+//                        mDAO.deleteMessage(thisMessage);
+//                    });
+//                    messages.remove(whichRow);
+//                    myAdapter.notifyItemRemoved(whichRow);
+//
+//                    Snackbar.make(messageText, "You deleted message #" + whichRow, Snackbar.LENGTH_LONG)
+//                            .setAction("Undo", clk -> {
+//
+//                                Executors.newSingleThreadExecutor().execute( () -> {
+//                                    mDAO.insertMessage(thisMessage);
+//                                });
+//
+//
+//                    messages.add(whichRow, thisMessage);
+//                    myAdapter.notifyItemInserted(whichRow);
+//
+//                        })
+//                        .show();
+//
+//                }).create().show();
 
             });
 
