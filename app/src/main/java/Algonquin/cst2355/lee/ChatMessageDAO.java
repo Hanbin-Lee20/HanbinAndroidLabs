@@ -18,4 +18,7 @@ public interface ChatMessageDAO {
 
     @Query("Select * from ChatMessage")//search statement
     public List<ChatMessage> getAllMessages();
+
+    @Query("Delete from ChatMessage")
+    void deleteAll();
 }

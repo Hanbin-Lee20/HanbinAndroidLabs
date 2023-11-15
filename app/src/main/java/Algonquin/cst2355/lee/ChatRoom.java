@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -49,6 +52,9 @@ public class ChatRoom extends AppCompatActivity {
 
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.myToolbar);
+
 
         //open db connection
         MessageDatabase db = Room.databaseBuilder(getApplicationContext(), MessageDatabase.class, "database-name").build();
@@ -186,6 +192,51 @@ public class ChatRoom extends AppCompatActivity {
         binding.recycleView.setLayoutManager(new LinearLayoutManager(this));
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.my_menu_file, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch( item.getItemId() ) {
+            case R.id.item_1:
+
+                //put your ChatMessage deletion code here. If you select this item, you should show the alert dialog
+                //asking if the user wants to delete this message.
+
+                findViewById(R.id.item_1).setOnClickListener( click -> {
+
+                });
+                    AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
+
+                    builder.setMessage("Do you want to delete the message: ")
+                            .setTitle("Question:")
+                            .setNegativeButton("No", (a,b) -> {})
+                            .setPositiveButton("Yes", (a,b) -> {
+                                messages.clear();
+                                Executors.newSingleThreadExecutor().execute(() -> {
+                                    mDAO.deleteAll();
+
+
+                                });
+
+                            }).create().show();
+
+                break;
+
+            case R.id.about:
+                Toast.makeText(this, "Version 1.0, created by Hanbin", Toast.LENGTH_LONG).show();
+                break;
+        }
+
+        return true;
+    }
+
 
     class MyRowHolder extends RecyclerView.ViewHolder {
 
