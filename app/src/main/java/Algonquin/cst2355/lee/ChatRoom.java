@@ -59,12 +59,13 @@ public class ChatRoom extends AppCompatActivity {
 
         chatModel.selectedMessage.observe(this, (newSelected) -> {
 
-            MessageDetailsFragment newFragment = new MessageDetailsFragment(newSelected);
-
+            MessageDetailsFragment newFragment = new MessageDetailsFragment( newSelected );
             FragmentManager fMgr = getSupportFragmentManager();
             FragmentTransaction tx = fMgr.beginTransaction();
-            tx.add(R.id.fragmentLocation, newFragment);
+            tx.replace(R.id.fragmentLocation, newFragment);
+            tx.addToBackStack("");
             tx.commit();
+
 
 //            String message = newSelected.message;
 //            String time = newSelected.timeSent;
