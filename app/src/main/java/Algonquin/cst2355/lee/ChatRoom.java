@@ -195,38 +195,37 @@ public class ChatRoom extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.my_menu_file, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch( item.getItemId() ) {
-            case R.id.item_1:
 
+        switch (item.getItemId()) {
+            case R.id.item_1:
                 //put your ChatMessage deletion code here. If you select this item, you should show the alert dialog
                 //asking if the user wants to delete this message.
 
-                findViewById(R.id.item_1).setOnClickListener( click -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
 
-                });
-                    AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
+                builder.setMessage("Do you want to delete the message: ")
+                        .setTitle("Question:")
+                        .setNegativeButton("No", (a, b) -> {
+                        })
+                        .setPositiveButton("Yes", (a, b) -> {
 
-                    builder.setMessage("Do you want to delete the message: ")
-                            .setTitle("Question:")
-                            .setNegativeButton("No", (a,b) -> {})
-                            .setPositiveButton("Yes", (a,b) -> {
-                                messages.clear();
-                                Executors.newSingleThreadExecutor().execute(() -> {
-                                    mDAO.deleteAll();
+                            Executors.newSingleThreadExecutor().execute(() -> {
+                                mDAO.deleteAll();
 
-
+                                runOnUiThread( () -> {
+                                    messages.clear();
+                                    myAdapter.notifyDataSetChanged();
                                 });
+                            });
 
-                            }).create().show();
-
+                        }).create().show();
                 break;
 
             case R.id.about:
@@ -269,7 +268,7 @@ public class ChatRoom extends AppCompatActivity {
 //                    });
 //                    messages.remove(whichRow);
 //                    myAdapter.notifyItemRemoved(whichRow);
-//
+
 //                    Snackbar.make(messageText, "You deleted message #" + whichRow, Snackbar.LENGTH_LONG)
 //                            .setAction("Undo", clk -> {
 //
@@ -285,7 +284,7 @@ public class ChatRoom extends AppCompatActivity {
 //                        .show();
 //
 //                }).create().show();
-
+//
             });
 
 
