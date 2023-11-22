@@ -1,5 +1,7 @@
 package Algonquin.cst2355.lee;
 
+import static android.text.TextUtils.lastIndexOf;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -208,7 +210,9 @@ public class ChatRoom extends AppCompatActivity {
                 //put your ChatMessage deletion code here. If you select this item, you should show the alert dialog
                 //asking if the user wants to delete this message.
 
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
+
 
                 builder.setMessage("Do you want to delete the message: ")
                         .setTitle("Question:")
@@ -217,10 +221,11 @@ public class ChatRoom extends AppCompatActivity {
                         .setPositiveButton("Yes", (a, b) -> {
 
                             Executors.newSingleThreadExecutor().execute(() -> {
-                                mDAO.deleteAll();
+
+                                mDAO.deleteLastMessage();
 
                                 runOnUiThread( () -> {
-                                    messages.clear();
+                                    messages.remove(messages.size() -1);
                                     myAdapter.notifyDataSetChanged();
                                 });
                             });
