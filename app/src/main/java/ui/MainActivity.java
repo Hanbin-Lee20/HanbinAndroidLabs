@@ -72,113 +72,110 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         queue = Volley.newRequestQueue(this);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate( getLayoutInflater() );
+        setContentView( binding.getRoot());
 
-        binding.forecastButton.setOnClickListener( cli -> {
-        String cityName = binding.cityTextField.getText().toString();
-
-            String url = null;
+        binding.forecastButton.setOnClickListener(click -> {
+            String cityName = binding.cityTextField.getText().toString();
+            String stringURL = null;
             try {
-                url = "https://api.openweathermap.org/data/2.5/weather?q="
-                                + URLEncoder.encode(cityName, "UTF-8")
-                                + "&appid=c73fc4616c26eeaf96ff734b52a3b6e3&units=metric";
+                stringURL = "https://api.openweathermap.org/data/2.5/weather?q="
+                        + URLEncoder.encode(cityName,"UTF-8")
+                        + "&appid=c73fc4616c26eeaf96ff734b52a3b6e3&units=metric";
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
 
-            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                response -> {
+            //this goes in the button click handler:
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
+                    (response) -> {
+                        try{
+                            JSONObject coord = response.getJSONObject( "coord" );
 
-                    try {
-                        JSONObject coord = response.getJSONObject( "coord" );
-                        JSONArray weatherArray = response.getJSONArray ( "weather" );
-                        JSONObject position0 = weatherArray.getJSONObject(0);
+                            JSONArray weatherArray = response.getJSONArray ( "weather" );
+                            JSONObject position0 = weatherArray.getJSONObject(0);
 
-                        int vis = response.getInt("visibility");
-                        String name = response.getString( "name" );
+                            int vis = response.getInt("visibility");
+                            String name = response.getString( "name" );
 
-                        String description = position0.getString("description");
-                        String iconName = position0.getString("icon");
+                            String description = position0.getString("description");
+                            String iconName = position0.getString("icon");
 
-                        JSONObject mainObject = response.getJSONObject( "main" );
-                        double current = mainObject.getDouble("temp");
-                        double min = mainObject.getDouble("temp_min");
-                        double max = mainObject.getDouble("temp_max");
-                        int humidity = mainObject.getInt("humidity");
+                            JSONObject mainObject = response.getJSONObject( "main" );
+                            double current = mainObject.getDouble("temp");
+                            double min = mainObject.getDouble("temp_min");
+                            double max = mainObject.getDouble("temp_max");
+                            int humidity = mainObject.getInt("humidity");
 
+                            String imageUrl = "http://openweathermap.org/img/w/" + iconName + ".png";
 
-                        ImageRequest imgReq = new ImageRequest("http://openweathermap.org/img/w/01d.png" + iconName + ".png", new Response.Listener<Bitmap>() {
-                            @Override
-                            public void onResponse(Bitmap bitmap) {
-//                                binding.icon.setImageBitmap(bitmap);
-                                Bitmap image = bitmap;
-
-                                FileOutputStream fOut = null;
-                                try {
-                                    fOut = openFileOutput( iconName + ".png", Context.MODE_PRIVATE);
-                                    image.compress(Bitmap.CompressFormat.PNG,100, MainActivity.this.openFileOutput(
-                                            iconName + ".png", Activity.MODE_PRIVATE) );
-                                    fOut.flush();
-                                    fOut.close();
-
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
+                            ImageRequest imgReq = new ImageRequest(imageUrl, new Response.Listener<Bitmap>() {
+                                @Override
+                                public void onResponse(Bitmap bitmap) {
+                                    binding.icon.setImageBitmap(bitmap);
+                                    Bitmap image = bitmap;
 
 
-                            }
-                        }, 1024, 1024, ImageView.ScaleType.CENTER, null,
-                                (error ) -> {
+                                    try {
+                                        image.compress(Bitmap.CompressFormat.PNG,100, MainActivity.this.openFileOutput(
+
+                                                iconName + ".png", Activity.MODE_PRIVATE) );
+
+                                    } catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+
+                                    }
+
                                     int i = 0;
 
-                                });
 
-                        queue.add(imgReq);
+                                }
+                            }, 1024, 1024, ImageView.ScaleType.CENTER, null,
+                                    (error ) -> {
+                                        int i = 0;
 
-                        runOnUiThread( (  )  -> {
+                                    });
 
-                            binding.temp.setText("The current temperature is " + current);
-                            binding.temp.setVisibility(View.VISIBLE);
+                            queue.add(imgReq);
 
-                            binding.minTemp.setText("The min temperature is " + min);
-                            binding.minTemp.setVisibility(View.VISIBLE);
 
-                            binding.maxTemp.setText("The max temperature is " + max);
-                            binding.maxTemp.setVisibility(View.VISIBLE);
+                            runOnUiThread( (  )  -> {
 
-                            binding.humitidy.setText("The humitidy is " + humidity);
-                            binding.humitidy.setVisibility(View.VISIBLE);
+                                binding.temp.setText("The current temperature is " + current);
+                                binding.temp.setVisibility(View.VISIBLE);
 
-                            binding.icon.setVisibility(View.VISIBLE);
+                                binding.minTemp.setText("The min temperature is " + min);
+                                binding.minTemp.setVisibility(View.VISIBLE);
 
-                            binding.description.setText("The description is " + description);
-                            binding.description.setVisibility(View.VISIBLE);
+                                binding.maxTemp.setText("The max temperature is " + max);
+                                binding.maxTemp.setVisibility(View.VISIBLE);
 
-                        });
+                                binding.humitidy.setText("The humitidy is " + humidity);
+                                binding.humitidy.setVisibility(View.VISIBLE);
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                },
+                                binding.icon.setVisibility(View.VISIBLE);
 
-                error -> {
-                    int i = 0;
-            });
+                                binding.description.setText("The description is " + description);
+                                binding.description.setVisibility(View.VISIBLE);
 
+
+
+                                // do this for all the textViews...
+
+                            });
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    },
+                    (error) -> {        });
             queue.add(request);
 
 
         });
-
     }
-
-
-
-
-    };
+}
 
 
 
