@@ -7,7 +7,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import Algonquin.cst2355.lee.R;
+import Algonquin.cst2355.lee.databinding.ActivityMainBinding;
 
 /**
  * This contains login screen with validate function
@@ -17,22 +33,24 @@ import Algonquin.cst2355.lee.R;
 public class MainActivity extends AppCompatActivity {
 
     /**
-     * This holds the text at the center of the screen
+     * This holds the text
      */
     private TextView tv = null;
 
     /**
-     * This holds the button to proceed login
+     * This holds the button
      */
     private Button bt = null;
 
     /**
-     * This holds the edit text for accepting password
+     * This holds the edit text
      */
     private EditText et = null;
 
+    protected RequestQueue queue = null;
+
     /**
-     * Entry point for launching password screen
+     * Entry point for retrieving weather info
      * @param savedInstanceState
      */
     @Override
@@ -41,90 +59,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tv = findViewById(R.id.textView);
-        et = findViewById(R.id.loginText);
-        bt = findViewById(R.id.loginButton);
+        queue = Volley.newRequestQueue(this);
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        bt.setOnClickListener(click -> {
-            String password = et.getText().toString();
+        binding.forecastButton.setOnClickListener( cli -> {
 
-            boolean isComplex = checkPasswordComplexity(password);
+        String cityName = binding.cityTextField.getText().toString();
+        String stringURL = null;
 
-            if(isComplex){
-                tv.setText("Your password meets the requirements");
-            }else{
-                tv.setText("You shall not pass!");
+            try {
+                stringURL = "https://api.openweathermap.org/data/2.5/weather?q="
+                        + URLEncoder.encode(cityName, "UTF-8")
+                        + "&appid=c73fc4616c26eeaf96ff734b52a3b6e3&units=metric";
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
             }
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, stringURL, null,
+                    (response) -> {
+                        try {
+                            JSONObject coord = response.getJSONObject("coord");
+                            JSONArray weatherArray = response.getJSONArray("weather");
+
+                            int vis = response.getInt("visibility");
+                            
+                        }catch() {
+
+                        }
+                    })
+
+
         });
 
-
-
     }
 
-    /**
-     * This method validates the password value contains:
-     * Uppercase, lowercase, number and special characters.
-     * @param pw
-     * @return returns true when password string passes every conditions.
-     */
-    boolean checkPasswordComplexity(String pw) {
-
-        boolean foundUpperCase, foundLowerCase, foundNumber, foundSpecial;
-
-        foundUpperCase = foundLowerCase = foundNumber = foundSpecial = false;
-        int duration = Toast.LENGTH_SHORT;
-
-        for (char c : pw.toCharArray()) {
-            if (Character.isUpperCase(c)) {
-                foundUpperCase = true;
-            } else if (Character.isLowerCase(c)) {
-                foundLowerCase = true;
-            } else if (Character.isDigit(c)) {
-                foundNumber = true;
-            } else if (isSpecialCharacter(c)) {
-                foundSpecial = true;
-            }
-        }
-
-        if (!foundUpperCase) {
-            Toast.makeText(this, "Your password is missing an uppercase letter.", duration).show();
-            return false;
-        } else if (!foundLowerCase) {
-            Toast.makeText(this, "Your password is missing a lowercase letter.", duration).show();
-            return false;
-        } else if (!foundNumber) {
-            Toast.makeText(this, "Your password is missing a number.", duration).show();
-            return false;
-        } else if (!foundSpecial) {
-            Toast.makeText(this, "Your password is missing a special character.", duration).show();
-            return false;
-        } else {
-            return true; // Only gets here if all conditions are met
-        }
-
-    }
-
-    /**
-     * This method validates whether the password contains special characters or not.
-     * @param c
-     * @return returns true when the password string contains one of the characters specified below
-     */
-    boolean isSpecialCharacter(char c) {
-        switch (c) {
-            case '#':
-            case '?':
-            case '*':
-            case '$':
-            case '%':
-            case '&':
-            case '@':
-            case '!':
-                return true;
-            default:
-                return false;
-        }
-
-    }
 
 
 
