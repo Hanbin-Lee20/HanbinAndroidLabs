@@ -8,22 +8,22 @@
     tools:context="ui.MainActivity">
 
     <TextView
+        android:textSize="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Type in the name of a city" />
 
     <EditText
         android:id="@+id/cityTextField"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Type city name here"  />
+        android:hint="Type city name here" />
 
     <Button
         android:id="@+id/forecastButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Forecast"
-        />
+        android:text="Get Forecast" />
 
     <TextView
         android:id="@+id/temp"
